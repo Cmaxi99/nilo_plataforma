@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: com.niloeducation.platform
+testFramework: junit
+sourceLanguage: java
+buildTool: maven
+features: [app-name, data, data-jpa, flyway, hibernate-jpa, http-client, jackson-databind, java, java-application, jdbc-hikari, junit, logback, lombok, management, maven, maven-enforcer-plugin, micrometer, micrometer-prometheus, micronaut-aot, micronaut-http-validation, mockito, netty-server, openapi, postgres, properties, readme, security, security-annotations, security-jwt, security-oauth2, shade, static-resources, test-resources, validation]
