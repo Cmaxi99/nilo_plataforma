@@ -52,7 +52,7 @@ services:
     networks:
       - nilo-network
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8080/health/ready || exit 1"]
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/localhost/8080 && echo -e 'GET /health/ready HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n' >&3 && cat <&3 | grep -q '200\\|UP' || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -74,12 +74,12 @@ services:
       DATASOURCES_DEFAULT_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
 
       # Keycloak/OAuth2 configuration
-      MICRONAUT_SECURITY_OAUTH2_CLIENTS_KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:-niloeducation-api}
-      MICRONAUT_SECURITY_OAUTH2_CLIENTS_KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET}
-      MICRONAUT_SECURITY_OAUTH2_CLIENTS_KEYCLOAK_OPENID_ISSUER: http://keycloak:8080/realms/${KEYCLOAK_REALM:-nilo}
+      OAUTH_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:-niloeducation-api}
+      OAUTH_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET:-dev-secret-change-in-production}
+      OAUTH_ISSUER: http://keycloak:8080/realms/${KEYCLOAK_REALM:-nilo}
 
       # JWT configuration
-      MICRONAUT_SECURITY_TOKEN_JWT_SIGNATURES_JWKS_KEYCLOAK_URL: http://keycloak:8080/realms/${KEYCLOAK_REALM:-nilo}/protocol/openid-connect/certs
+      JWKS_URL: http://keycloak:8080/realms/${KEYCLOAK_REALM:-nilo}/protocol/openid-connect/certs
 
       # Micronaut environment
       MICRONAUT_ENVIRONMENTS: dev

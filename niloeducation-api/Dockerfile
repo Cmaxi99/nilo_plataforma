@@ -13,6 +13,9 @@ COPY pom.xml .
 # Descargar dependencias (se cachea si pom.xml no cambia)
 RUN ./mvnw dependency:go-offline -B
 
+# Copiar openapi.properties (necesario para generar Swagger UI)
+COPY openapi.properties .
+
 # Copiar código fuente
 COPY src ./src
 

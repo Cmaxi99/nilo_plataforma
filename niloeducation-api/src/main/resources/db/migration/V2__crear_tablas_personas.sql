@@ -12,14 +12,12 @@ CREATE TABLE persona (
     nombre VARCHAR(100) NOT NULL,
     apellido VARCHAR(100) NOT NULL,
     telefono VARCHAR(20),
-    tipo VARCHAR(20) NOT NULL CHECK (tipo IN ('ALUMNO', 'PROFESOR'))
+    email VARCHAR(100) NOT NULL,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Índice para búsquedas por keycloak_user_id
 CREATE INDEX idx_persona_keycloak_user_id ON persona(keycloak_user_id);
-
--- Índice para búsquedas por tipo
-CREATE INDEX idx_persona_tipo ON persona(tipo);
 
 -- Tabla: alumno
 -- Información específica de alumnos
@@ -29,6 +27,7 @@ CREATE TABLE alumno (
     legajo VARCHAR(20) UNIQUE NOT NULL,
     nivel_educativo VARCHAR(50),
     id_estado_alumno INTEGER NOT NULL,
+    fecha_primera_inscripcion TIMESTAMP,
 
     -- Foreign Keys
     CONSTRAINT fk_alumno_persona
@@ -72,7 +71,7 @@ CREATE INDEX idx_profesor_especialidad ON profesor(id_especialidad);
 -- Comentarios de documentación
 COMMENT ON TABLE persona IS 'Tabla base con información común de alumnos y profesores. Vinculada con Keycloak via keycloak_user_id';
 COMMENT ON COLUMN persona.keycloak_user_id IS 'ID del usuario en Keycloak (claim "sub" del JWT)';
-COMMENT ON COLUMN persona.tipo IS 'Discriminador: ALUMNO o PROFESOR';
+
 
 COMMENT ON TABLE alumno IS 'Información específica de estudiantes';
 COMMENT ON COLUMN alumno.legajo IS 'Matrícula única del alumno (ej: A2025001)';
